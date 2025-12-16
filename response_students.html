@@ -1,0 +1,736 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="BDSY8MR8dmg7wtFIVsFwejakTWZXGI2wOp8Yf4ex">
+    
+    <!-- Primary Meta Tags -->
+    <title>Students Management</title>
+    <meta name="description" content="High School Enrollment Management System">
+    
+    <!-- Favicon & Theme Color -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <meta name="theme-color" content="#1A73E8">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 with Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom Styles with Enhanced Design -->
+    <style>
+        :root {
+            --primary: #1A73E8;
+            --primary-dark: #0F4EB3;
+            --primary-light: rgba(26, 115, 232, 0.1);
+            --background: #F7F9FC;
+            --surface: #FFFFFF;
+            --accent: #4DB5FF;
+            --success: #34A853;
+            --warning: #FBBC05;
+            --danger: #EA4335;
+            --text-primary: #202124;
+            --text-secondary: #5F6368;
+            --border: #E8EAED;
+            --shadow-sm: 0 2px 8px rgba(26, 115, 232, 0.08);
+            --shadow-md: 0 4px 12px rgba(26, 115, 232, 0.12);
+            --shadow-lg: 0 8px 24px rgba(26, 115, 232, 0.16);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #ffffff 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Navigation - Unique Feature */
+        .sidebar-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .sidebar-container.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        @media (min-width: 992px) {
+            .sidebar-container {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+            padding: 0.75rem 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (min-width: 992px) {
+            .top-nav {
+                left: 280px;
+            }
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-brand:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Statistics Cards - Unique Feature */
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        }
+
+        /* Quick Actions */
+        .quick-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .quick-action:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        /* Enhanced Alerts */
+        .alert-enhanced {
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            animation: fadeIn 0.4s ease-out;
+            border: 1px solid var(--border);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 1.25rem;
+                margin: 0 -1rem;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+            
+            .top-nav {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #121212;
+                --surface: #1e1e1e;
+                --text-primary: #ffffff;
+                --text-secondary: #b0b0b0;
+                --border: #2d2d2d;
+            }
+            
+            body {
+                background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            }
+            /* Add these to the existing styles in master.blade.php */
+.table-hover tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(26, 115, 232, 0.05);
+    transform: translateX(2px);
+}
+
+.badge {
+    padding: 0.35em 0.65em;
+    font-weight: 500;
+}
+        }
+    </style>
+
+        <script type="module" src="http://[::1]:5173/@vite/client"></script><link rel="stylesheet" href="http://[::1]:5173/resources/css/app.css" /><script type="module" src="http://[::1]:5173/resources/js/app.js"></script></head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-container" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="h4 mb-0">
+                <i class="bi bi-mortarboard-fill me-2"></i>
+                Laravel
+            </h2>
+            <small class="text-white-50">High School Management</small>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item">
+                <a class="nav-link "
+                   href="http://127.0.0.1:8000">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                    <span class="badge bg-success ms-auto">New</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a class="nav-link  active "
+                   href="http://127.0.0.1:8000/students">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Students</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a class="nav-link "
+                   href="http://127.0.0.1:8000/teachers">
+                    <i class="bi bi-person-badge-fill"></i>
+                    <span>Teachers</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a class="nav-link "
+                   href="http://127.0.0.1:8000/courses">
+                    <i class="bi bi-journal-bookmark-fill"></i>
+                    <span>Courses</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a class="nav-link "
+                   href="http://127.0.0.1:8000/subjects">
+                    <i class="bi bi-book-half"></i>
+                    <span>Subjects</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a class="nav-link "
+                   href="http://127.0.0.1:8000/sections">
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                    <span>Sections</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a class="nav-link "
+                   href="http://127.0.0.1:8000/academic-years">
+                    <i class="bi bi-calendar-week-fill"></i>
+                    <span>Academic Years</span>
+                </a>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="px-3 mt-4 pt-4 border-top border-white-10">
+                <small class="text-white-50 d-block mb-2">SY 2025-2026</small>
+                <div class="d-flex justify-content-between text-white mb-1">
+                    <small>Enrollment Progress</small>
+                    <small class="fw-bold">78%</small>
+                </div>
+                <div class="progress" style="height: 4px; background: rgba(255,255,255,0.1)">
+                    <div class="progress-bar bg-success" style="width: 78%"></div>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Mobile Menu Toggle -->
+                <button class="btn btn-outline-primary d-lg-none" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                
+                <!-- Current Page Title -->
+                <h4 class="mb-0 text-primary fw-semibold d-none d-md-block">
+                    Students Management                </h4>
+                
+                <!-- Quick Actions & User Menu -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Quick Actions -->
+                    <div class="d-none d-md-flex gap-2">
+                        <a href="http://127.0.0.1:8000/students/create" class="quick-action">
+                            <i class="bi bi-plus-circle"></i>
+                            New Student
+                        </a>
+                        <a href="http://127.0.0.1:8000/courses/create" class="quick-action">
+                            <i class="bi bi-plus-lg"></i>
+                            New Course
+                        </a>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="dropdown">
+                        <button class="btn btn-link text-decoration-none p-0" type="button" 
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                                     style="width: 40px; height: 40px;">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <div class="d-none d-md-block">
+                                    <div class="small fw-semibold">Administrator</div>
+                                    <div class="x-small text-muted">High School Staff</div>
+                                </div>
+                                <i class="bi bi-chevron-down text-muted"></i>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container-fluid py-4 px-3 px-lg-4">
+            <!-- Flash Messages -->
+            
+            
+            
+            <!-- Page Content -->
+            <div class="content-wrapper">
+                                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb bg-transparent p-0">
+                                <li class="breadcrumb-item"><a href="http://127.0.0.1:8000">Dashboard</a></li>
+    <li class="breadcrumb-item active">Students</li>
+                        </ol>
+                    </nav>
+                
+                
+                <div class="row mb-4">
+    <!-- Statistics Cards -->
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
+                    <i class="bi bi-people-fill text-primary fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="mb-0 fw-bold">1</h3>
+                    <small class="text-muted">Total Students</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 p-3 rounded me-3">
+                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="mb-0 fw-bold">0</h3>
+                    <small class="text-muted">Active Students</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="bg-info bg-opacity-10 p-3 rounded me-3">
+                    <i class="bi bi-gender-ambiguous text-info fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="mb-0 fw-bold">0</h3>
+                    <small class="text-muted">Male Students</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
+                    <i class="bi bi-gender-female text-warning fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="mb-0 fw-bold">0</h3>
+                    <small class="text-muted">Female Students</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow">
+    <div class="card-body p-0">
+        <!-- Filters and Search -->
+        <div class="p-4 border-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Search students by name or ID...">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-end gap-2">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-funnel me-1"></i> Filter
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">All Students</a></li>
+                                <li><a class="dropdown-item" href="#">Active Only</a></li>
+                                <li><a class="dropdown-item" href="#">By Grade Level</a></li>
+                                <li><a class="dropdown-item" href="#">By Section</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-outline-primary">
+                            <i class="bi bi-download me-1"></i> Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="border-0">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="selectAll">
+                            </div>
+                        </th>
+                        <th class="border-0 text-primary fw-semibold">Student ID</th>
+                        <th class="border-0 text-primary fw-semibold">Full Name</th>
+                        <th class="border-0 text-primary fw-semibold">Grade Level</th>
+                        <th class="border-0 text-primary fw-semibold">Section</th>
+                        <th class="border-0 text-primary fw-semibold">Contact</th>
+                        <th class="border-0 text-primary fw-semibold">Status</th>
+                        <th class="border-0 text-primary fw-semibold text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                        <tr class="align-middle">
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
+                                    <i class="bi bi-person-badge text-primary"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">1</div>
+                                    <small class="text-muted">ID</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fw-semibold">Jane Smith</div>
+                            <small class="text-muted">No email</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-info bg-opacity-10 text-info border border-info">
+                                Grade N/A
+                            </span>
+                        </td>
+                        <td>
+                                                            <span class="text-muted">Not assigned</span>
+                                                    </td>
+                        <td>
+                            <small>No phone</small><br>
+                            <small class="text-muted">No address</small>
+                        </td>
+                        <td>
+                                                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary">
+                                    <i class="bi bi-question-circle me-1"></i> Pending
+                                </span>
+                                                    </td>
+                        <td>
+                            <div class="d-flex justify-content-end gap-2">
+                       <a href="http://127.0.0.1:8000/students/1"
+
+
+                                   class="btn btn-sm btn-outline-primary" 
+                                   data-bs-toggle="tooltip" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                
+                                <a href="http://127.0.0.1:8000/students/1/edit" 
+                                   class="btn btn-sm btn-outline-warning" 
+                                   data-bs-toggle="tooltip" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                
+                                <form action="http://127.0.0.1:8000/students/1" 
+                                      method="POST" class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                    <input type="hidden" name="_token" value="BDSY8MR8dmg7wtFIVsFwejakTWZXGI2wOp8Yf4ex" autocomplete="off">                                    <input type="hidden" name="_method" value="DELETE">                                    <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                            data-bs-toggle="tooltip" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                                    </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+            </div>
+</div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-5 pt-4 border-top text-center text-muted">
+                <div class="container">
+                    <p class="mb-1">
+                        &copy; 2025 Laravel. All rights reserved.
+                    </p>
+                    <p class="small">
+                        <span class="badge bg-primary">v1.0</span>
+                        Current Academic Year: 2025-2026
+                        <span class="mx-2">•</span>
+                        Last Updated: Dec 11, 2025
+                    </p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar toggle functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            if (window.innerWidth < 992 && 
+                !sidebar.contains(event.target) && 
+                !toggleBtn.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert-enhanced');
+            alerts.forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+
+        // Add active class to current route
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+    </body>
+</html>
